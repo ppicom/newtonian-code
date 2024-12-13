@@ -24,7 +24,15 @@ func (uc *TransferMoneyUseCase) Execute(from, to string, amount int) error {
 		return err
 	}
 
-	return banking.Transfer(fromAccount, toAccount, amount)
+	if err := banking.Transfer(fromAccount, toAccount, amount); err != nil {
+		return err
+	}
+
+	if err := uc.accountRepository.Save(fromAccount); err != nil {
+		return err
+	}
+
+	return uc.accountRepository.Save(toAccount)
 }
 
 func NewTransferMoneyUseCase(accountRepository AccountRepository) *TransferMoneyUseCase {
