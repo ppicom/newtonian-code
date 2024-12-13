@@ -1,0 +1,5 @@
+# Coverage
+*.out
+
+# Binary
+bin/
